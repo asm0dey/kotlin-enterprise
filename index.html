@@ -1,49 +1,470 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="css/reset.css">
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+    <title>Kotlin in enterprise</title>
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/monokai.css">
+    <!-- build:css -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/additional.css">
+    <link rel="stylesheet" href="css/theme/sky.css">
+    <!--    <link rel="stylesheet" href="css/fonts/stylesheet.css">-->
+    <!-- Theme used for syntax highlighting of code -->
+    <link href="https://fonts.googleapis.com/css?family=Fira+Mono|Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="plugin/verticator/verticator.css">
+    <!-- endbuild -->
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
 
-		<script src="js/reveal.js"></script>
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+    <style>
+        .reveal,
+        .reveal h1,
+        .reveal h2,
+        .reveal h3,
+        .reveal h4,
+        .reveal h5,
+        .reveal h6 {
+            font-family: 'Open Sans', sans-serif;
+        }
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true }
-				]
-			});
-		</script>
-	</body>
+        .reveal code {
+            font-family: 'Fira Mono', monospace;
+        }
+
+        .reveal section img.noborder {
+            background: none;
+            border: none;
+            box-shadow: none;
+        }
+
+        .reveal .slides section[data-vertical-align-top] {
+            top: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+<div class="reveal">
+    <ul class="verticator">
+    </ul>
+    <div class="slides">
+        <section>
+            <h1>Kotlin</h1>
+            <h3>Два года в продакшне и ни единого разрыва</h3>
+            <p>
+                <small>Паша Финкельштейн</small>
+            </p>
+        </section>
+        <section data-markdown="slides/intro1.md"></section>
+        <section data-background-image="images/enterprise2.png" data-vertical-align-top>
+            <h2 style="color: white">Не для тех, кто уже</h2>
+        </section>
+        <section data-markdown="slides/intro2.md" data-separator-vertical="$\r?\n-v-\r?\n$"></section>
+        <section><h2>Дазы Банных</h2></section>
+        <section>
+            <section>
+                <h2>Spring + Kotlin. Part 1. <code>@Transactional</code></h2>
+                <pre><code class="hljs" data-line-numbers>@Transactional
+class MySmartService(repo1: Repository1, repo2: Repository2) {
+    fun complex(datum: String): Result {
+        val interim = repo1.save(datum)
+        return repo2.destroy(someOp(interim))
+    }
+    fun someOp(input: String) =
+        if (notLucky(input)) throw Exception("Sorry, bro") else input</code></pre>
+            </section>
+            <section>
+                <h2>Spring + Kotlin. Part 1. <code>@Transactional</code></h2>
+                <pre><code class="hljs" data-line-numbers="1,2">@Transactional
+class MySmartService(repo1: Repository1, repo2: Repository2) {
+    fun complex(datum: String): Result {
+        val interim = repo1.save(datum)
+        return repo2.destroy(someOp(interim))
+    }
+    fun someOp(input: String) =
+        if (notLucky(input)) throw Exception("Sorry, bro") else input</code></pre>
+            </section>
+            <section>
+                <h2>Spring + Kotlin. Part 1. <code>@Transactional</code></h2>
+                <pre><code class="hljs" data-line-numbers="3-6">@Transactional
+class MySmartService(repo1: Repository1, repo2: Repository2) {
+    fun complex(datum: String): Result {
+        val interim = repo1.save(datum)
+        return repo2.destroy(someOp(interim))
+    }
+    fun someOp(input: String) =
+        if (notLucky(input)) throw Exception("Sorry, bro") else input</code></pre>
+            </section>
+            <section>
+                <h2>Spring + Kotlin. Part 1. <code>@Transactional</code></h2>
+                <pre><code class="hljs" data-line-numbers="7,8">@Transactional
+class MySmartService(repo1: Repository1, repo2: Repository2) {
+    fun complex(datum: String): Result {
+        val interim = repo1.save(datum)
+        return repo2.destroy(someOp(interim))
+    }
+    fun someOp(input: String) =
+        if (notLucky(input)) throw Exception("Sorry, bro") else input</code></pre>
+            </section>
+        </section>
+        <section>
+            <h2>Что может пойти не так?</h2>
+        </section>
+        <section>
+            <section data-background-image="images/nucl3.gif"></section>
+            <section data-markdown="">
+                    <textarea data-template="">
+## Прокси
+
+![](images/transactions.png) <!-- .element class="noborder" -->
+                    </textarea>
+            </section>
+            <!-- edit: https://www.planttext.com/?text=ZL8zJyCm4DtzAqvT2WCLOc2e4Eg0-0DbwtIsBwrLVqJskKtvzJXEQDC24XcSyxrtxpvygyGOEJihC7FmsKcAOcSqGHC2oz29j3U-nOWENF11xM9m11mpJP0TUdsCXfdyBQIfmMpvFNXUcq-2fqSnBmWRPLhq36kA1wC8C44wA365PXyHVKB59dYqa4Pc6qDtclK1rVep11nwt5AiLExAJMXab9W8thwD0cdvZwo3I5-Xs8I7ro7r4XHQ2qtsT_UYUg10DTKIGbk7STOI_U-0J6CjzUpvMYv1qjPC6AMakPPJiRsOdmF6tCLtoLagkwfciLWC5b17AZCbA2xHyoOIaL9v6u6MBxIKbQAKccpjIK3vRXjJmJd35RhgOVIJBMFbiYR7L4GLjRNvddtPC7Z-LJa6QoMg_K_jCq9U2qtJGKrkms0tBm_NxGcnAc5bnxy0  -->
+            <section data-background-size="auto 100%"
+                     data-background-image="https://www.plantuml.com/plantuml/svg/ZL8zJyCm4DtzAqvT2WCLOc2e4Eg0-0DbwtIsBwrLVqJskKtvzJXEQDC24XcSyxrtxpvygyGOEJihC7FmsKcAOcSqGHC2oz29j3U-nOWENF11xM9m11mpJP0TUdsCXfdyBQIfmMpvFNXUcq-2fqSnBmWRPLhq36kA1wC8C44wA365PXyHVKB59dYqa4Pc6qDtclK1rVep11nwt5AiLExAJMXab9W8thwD0cdvZwo3I5-Xs8I7ro7r4XHQ2qtsT_UYUg10DTKIGbk7STOI_U-0J6CjzUpvMYv1qjPC6AMakPPJiRsOdmF6tCLtoLagkwfciLWC5b17AZCbA2xHyoOIaL9v6u6MBxIKbQAKccpjIK3vRXjJmJd35RhgOVIJBMFbiYR7L4GLjRNvddtPC7Z-LJa6QoMg_K_jCq9U2qtJGKrkms0tBm_NxGcnAc5bnxy0"></section>
+        </section>
+        <section>
+            <section>
+                <h2>Spring + Kotlin. Part 1. <code>@Transactional</code></h2>
+                <pre><code class="hljs" data-line-numbers>@Transactional
+class MySmartService(repo1: Repository1, repo2: Repository2) {
+    fun complex(datum: String): Result {
+        val interim = repo1.save(datum)
+        return repo2.destroy(someOp(interim))
+    }
+    fun someOp(input: String) =
+        if (notLucky(input)) throw Exception("Sorry, bro") else input</code></pre>
+            </section>
+            <section>
+                <h2>Spring + Kotlin. Part 1. <code>@Transactional</code></h2>
+                <pre><code class="hljs" data-line-numbers="2,3">@Transactional
+open class MySmartService(repo1: Repository1, repo2: Repository2) {
+    open fun complex(datum: String): Result {
+        val interim = repo1.save(datum)
+        return repo2.destroy(someOp(interim))
+    }
+    fun someOp(input: String) =
+        if (notLucky(input)) throw Exception("Sorry, bro") else input</code></pre>
+            </section>
+            <section>
+                <h2>Spring + Kotlin. Part 1. <code>@Transactional</code></h2>
+                <pre><code class="hljs" data-line-numbers="2,3">@Transactional
+class MySmartService(repo1: Repository1, repo2: Repository2) {
+    fun complex(datum: String): Result {
+        val interim = repo1.save(datum)
+        return repo2.destroy(someOp(interim))
+    }
+    fun someOp(input: String) =
+        if (notLucky(input)) throw Exception("Sorry, bro") else input</code></pre>
+            </section>
+        </section>
+        <section>
+            <h2>Spring + Kotlin. Part 1. <code>@Transactional</code></h2>
+            <div class="row">
+                <div class="col-30">
+                    <h4><b>Проблемы</b></h4>
+                    <ul>
+                        <li class="fragment">Всё final</li>
+                        <li class="fragment">Прокси не создаются</li>
+                        <li class="fragment">Конфигурации не работают</li>
+                    </ul>
+                </div>
+                <div class="col-60 push-10">
+                    <h4><b>Решения</b></h4>
+                    <ul>
+                        <li class="fragment"><code>kotlin-allopen + kotlin-spring</code>
+                            <ul>
+                                <li>The code is a lie ⇒ сложное кодревью</li>
+                                <li>Конструкция хрупкая</li>
+                            </ul>
+                        </li>
+                        <li class="fragment">Всюду явно писать open
+                            <ul>
+                                <li>boilerplate</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section>
+            <section>
+                <h2>Spring + Kotlin. Part 2. <code>@Transactional</code></h2>
+                <pre><code class="hljs" data-line-numbers>@Transactional
+open class MySmartService(repo1: Repository1, repo2: Repository2) {
+    open fun complex(datum: String): Result {
+        val interim = repo1.save(datum)
+        return repo2.destroy(someOp(interim))
+    }
+    fun someOp(input: String) =
+        if (notLucky(input)) throw Exception("Sorry, bro") else input</code></pre>
+                <small class="fragment">Что может пойти не так?</small>
+            </section>
+            <section data-background-image="images/collateral.jpg" data-vertical-align-top="">
+                <h2 style="color: white">Collateral damage</h2>
+            </section>
+            <section>
+                <h2>Spring + Kotlin. Part 2. <code>@Transactional</code></h2>
+                <pre><code class="hljs" data-line-numbers="8">@Transactional
+open class MySmartService(repo1: Repository1, repo2: Repository2) {
+    open fun complex(datum: String): Result {
+        val interim = repo1.save(datum)
+        return repo2.destroy(someOp(interim))
+    }
+    fun someOp(input: String) =
+        if (notLucky(input)) throw Exception("Sorry, bro") else input</code></pre>
+            </section>
+            <section>
+                <h2>Исключения</h2>
+                <p>Как они устроены?</p>
+            </section>
+            <section data-markdown="slides/exceptions.md"></section>
+            <section>
+                <h2>Исключения</h2>
+                <pre><code class="hljs" data-line-numbers="7-9">public static RuntimeException sneakyThrow(Throwable t) {
+    if (t == null) throw new NullPointerException("t");
+    return Lombok.&lt;RuntimeException&gt;sneakyThrow0(t);
+}
+
+@SuppressWarnings("unchecked")
+private static &lt;T extends Throwable&gt; T sneakyThrow0(Throwable t) throws T {
+    throw (T)t;
+}
+                        </code></pre>
+            </section>
+            <section>
+                <h2>Исключения</h2>
+                <pre><code class="hljs" data-line-numbers="3">public static RuntimeException sneakyThrow(Throwable t) {
+    if (t == null) throw new NullPointerException("t");
+    return Lombok.&lt;RuntimeException&gt;sneakyThrow0(t);
+}
+
+@SuppressWarnings("unchecked")
+private static &lt;T extends Throwable&gt; T sneakyThrow0(Throwable t) throws T {
+    throw (T)t;
+}
+                        </code></pre>
+                <h3 class="fragment" style="color: red">Транзакция не откатится!</h3>
+            </section>
+            <section>
+                <h2>Spring + Kotlin. Part 2. <code>@Transactional</code></h2>
+                <div class="row">
+                    <div class="col-50">
+                        <h4><b>Проблема</b></h4>
+                        <p>Не откатываются транзакции</p>
+                    </div>
+                    <div class="col-50 fragment">
+                        <h4><b>Решение</b></h4>
+                        <p>Внимательно следить за сторонними исключениями</p>
+                        <p>Не создавать свои checked</p>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Баллада об <code>inline</code></h2>
+                <pre><code class="hljs" data-line-numbers="">@Transactional
+open class SomeService(val repo: SomeRepo){
+    open fun someFunc(mapper: (DTO)-&gt;Long): List&lt;Long&gt; =
+        repo
+            .someAction()
+            .map{ mapper(it) }</code></pre>
+            </section>
+            <section>
+                <h2>Баллада об <code>inline</code></h2>
+                <pre><code class="hljs" data-line-numbers="1,2">@Transactional
+open class SomeService(val repo: SomeRepo){
+    open fun someFunc(mapper: (DTO)-&gt;Long): List&lt;Long&gt; =
+        repo
+            .someAction()
+            .map{ mapper(it) }</code></pre>
+            </section>
+            <section>
+                <h2>Баллада об <code>inline</code></h2>
+                <pre><code class="hljs" data-line-numbers="3-6">@Transactional
+open class SomeService(val repo: SomeRepo){
+    open fun someFunc(mapper: (DTO)-&gt;Long): List&lt;Long&gt; =
+        repo
+            .someAction()
+            .map{ mapper(it) }</code></pre>
+            </section>
+            <section>
+                <h2>Баллада об <code>inline</code></h2>
+                <pre><code class="hljs" data-line-numbers="">@Transactional
+open class SomeService(val repo: SomeRepo){
+    open fun someFunc(mapper: (DTO)-&gt;Long): List&lt;Long&gt; =
+        repo
+            .someAction()
+            .map{ mapper(it) }</code></pre>
+                <p class="fragment">
+                    <small>Но есть же <code>inline</code></small>
+                </p>
+                <p class="fragment">Улучшаем!</p>
+            </section>
+            <section>
+                <h2>Баллада об <code>inline</code></h2>
+                <pre><code class="hljs" data-line-numbers>@Transactional
+open class SomeService(val repo: SomeRepo){
+    inline open fun someFunc(mapper: (DTO)-&gt;Long): List&lt;Long&gt; =
+        repo
+            .someAction()
+            .map{ mapper(it) }</code></pre>
+                <p>
+                    <small>&nbsp;</small>
+                </p>
+                <p>&nbsp;</p>
+            </section>
+            <section data-background-image="images/nucl3.gif"></section>
+            <section>
+                <h2>Баллада об <code>inline</code></h2>
+                <div class="row">
+                    <div class="col-50">
+                        <h4>Проблема</h4>
+                        <ul>
+                            <li><code>inline</code> инлайнится даже когда не надо</li>
+                        </ul>
+                    </div>
+                    <div class="col-50">
+                        <h4>Решение</h4>
+                        <ul>
+                            <li>Все зависимости надо делать приватными</li>
+                            <li>Думать когда пользуешься <code>inline</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section data-markdown="slides/jooq.md"></section>
+        <section>
+            <section data-markdown=""><textarea data-template="">
+### Мы ынтырпрайз, у нас JPA, а не ваши хипстерские штучки
+
+**Disclaimer**: у меня нет опыта с этим
+
+**Проблема**: no-arg конструкторов в data-классах нет
+
+**Решение 1**: не использовать data-классы
+
+*Абыдна*
+            </textarea></section>
+            <section>
+                <h3>Мы ынтырпрайз, у нас JPA, а не ваши хипстерские штучки</h3>
+
+                <pre><code class="hljs" data-line-numbers data-separator-vertical="$\r?\n-v-\r?\n$"><artifactId>kotlin-maven-plugin</artifactId>
+<groupId>org.jetbrains.kotlin</groupId>
+<configuration>
+    <compilerPlugins>
+        <plugin>jpa</plugin>
+    </compilerPlugins>
+</configuration>
+<dependencies>
+    <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-noarg</artifactId>
+    </dependency>
+</dependencies>
+                    </code></pre>
+            </section>
+            <section>
+                <h3>Мы ынтырпрайз, у нас JPA, а не ваши хипстерские штучки</h3>
+
+                <pre><code class="hljs" data-line-numbers="2"><artifactId>kotlin-maven-plugin</artifactId>
+<groupId>org.jetbrains.kotlin</groupId>
+<configuration>
+    <compilerPlugins>
+        <plugin>jpa</plugin>
+    </compilerPlugins>
+</configuration>
+<dependencies>
+    <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-noarg</artifactId>
+    </dependency>
+</dependencies>
+                </code></pre>
+            </section>
+            <section>
+                <h3>Мы ынтырпрайз, у нас JPA, а не ваши хипстерские штучки</h3>
+
+                <pre><code class="hljs" data-line-numbers="9-12"><artifactId>kotlin-maven-plugin</artifactId>
+<groupId>org.jetbrains.kotlin</groupId>
+<configuration>
+    <compilerPlugins>
+        <plugin>jpa</plugin>
+    </compilerPlugins>
+</configuration>
+<dependencies>
+    <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-noarg</artifactId>
+    </dependency>
+</dependencies>
+                        </code></pre>
+            </section>
+            <section>
+                <h3>Мы ынтырпрайз, у нас JPA, а не ваши хипстерские штучки</h3>
+
+                <pre><code class="hljs" data-line-numbers="4-6"><artifactId>kotlin-maven-plugin</artifactId>
+<groupId>org.jetbrains.kotlin</groupId>
+<configuration>
+    <compilerPlugins>
+        <plugin>jpa</plugin>
+    </compilerPlugins>
+</configuration>
+<dependencies>
+    <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-noarg</artifactId>
+    </dependency>
+</dependencies>
+                            </code></pre>
+            </section>
+        </section>
+        <section data-markdown="slides/tests.md" data-separator-vertical="$\r?\n-v-\r?\n$"></section>
+        <section data-markdown="slides/special.md" data-separator-vertical="$\r?\n-v-\r?\n$"></section>
+    </div>
+</div>
+
+<script src="js/reveal.min.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        transition: 'none',
+        // transitionSpeed: 'fast',
+        verticator: {
+            color: 'black'
+        },
+        hash: true,
+        controlsTutorial: false,
+        dependencies: [
+            {src: 'js/verticator.min.js'},
+            {src: 'js/marked.min.js'},
+            {src: 'js/markdown.min.js'},
+            {src: 'js/notes.min.js', async: true},
+            {src: 'js/highlight.min.js', async: true},
+            // {
+            //     src: 'plugin/zero-index/zero-index-main.js',
+            //     async: true
+            // },
+        ],
+    });
+</script>
+</body>
+
 </html>
