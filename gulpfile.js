@@ -27,12 +27,19 @@ gulp.task('styles', () => {
         .pipe(sourcemaps.init())
         .pipe(concat('cssFiles.css'));
 
-    return merge(sassStream, cssStream)
-        .pipe(concat('styles.min.css'))
-        // .pipe(sourcemaps.init())
+    let printCss = gulp.src('css/print/*.css')
+        .pipe(sourcemaps.init())
         .pipe(cleanCSS({compatibility: 'ie10'}))
         .pipe(sourcemaps.write("./maps"))
-        .pipe(gulp.dest('./dist/css'))
+        .pipe(gulp.dest('dist/css/print/'));
+
+    const cssBundle = merge(sassStream, cssStream)
+        .pipe(concat('styles.min.css'))
+        .pipe(cleanCSS({compatibility: 'ie10'}))
+        .pipe(sourcemaps.write("./maps"))
+        .pipe(gulp.dest('./dist/css'));
+
+    return merge(cssBundle, printCss)
         .pipe(browserSync.stream());
 });
 
@@ -45,16 +52,21 @@ const js = ['js/reveal.js',
 
 
 gulp.task('js', () => {
-    return gulp.src(js)
+    const localjs = gulp.src(js)
         .pipe(sourcemaps.init())
         .pipe(rename(function (path) {
             path.extname = '.min.js'
         }))
         .pipe(uglify())
         .pipe(sourcemaps.write("./maps")) // Inline source maps.
-        .pipe(gulp.dest('./dist/js'))
-        .pipe(browserSync.stream());
+        .pipe(gulp.dest('./dist/js'));
 
+    const notesHtml = gulp.src('plugin/notes/notes.html')
+        .pipe(htmlmin({collapseWhitespace: true}))
+        .pipe(gulp.dest('./dist/js'));
+
+    return merge(localjs, notesHtml)
+        .pipe(browserSync.stream());
 });
 
 gulp.task('md', () => {

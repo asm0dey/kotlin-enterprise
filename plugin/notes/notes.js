@@ -21,8 +21,8 @@ var RevealNotes = (function() {
         }
 
 		if( !notesFilePath ) {
-			var jsFileLocation = document.querySelector('script[src$="notes.js"]').src;  // this js file path
-			jsFileLocation = jsFileLocation.replace(/notes\.js(\?.*)?$/, '');   // the js folder path
+			var jsFileLocation = document.querySelector('script[src$="js/notes.min.js"]').src;  // this js file path
+			jsFileLocation = jsFileLocation.replace(/notes\.min\.js(\?.*)?$/, '');   // the js folder path
 			notesFilePath = jsFileLocation + 'notes.html';
 		}
 

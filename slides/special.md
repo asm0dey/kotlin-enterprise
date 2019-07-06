@@ -191,3 +191,148 @@ data class Person (
 
 </div>
 </div>
+
+---
+
+## Функциональщина
+
+---
+
+## Как мы свои монады писали
+
+<pre><code class="hljs" data-line-numbers>sealed class Either&lt;out LEFT, out RIGHT&gt; {
+  class Left&lt;LEFT&gt;(private val left: LEFT) : Either&lt;LEFT, Nothing&gt;() {
+    override fun &lt;R&gt; mapLeft(trans: (LEFT) -&gt; R) = Left(trans(left))
+    override fun &lt;R&gt; mapRight(trans: (Nothing) -&gt; R) = this
+  }
+  class Right&lt;RIGHT&gt;(private val right: RIGHT) : Either&lt;Nothing, RIGHT&gt;() {
+    override fun &lt;R&gt; mapLeft(trans: (Nothing) -&gt; R) = this
+    override fun &lt;R&gt; mapRight(trans: (RIGHT) -&gt; R) = Right(trans(right))
+  }
+  abstract fun &lt;R&gt; mapLeft(trans: (LEFT) -&gt; R): Either&lt;R, RIGHT&gt;
+  abstract fun &lt;R&gt; mapRight(trans: (RIGHT) -&gt; R): Either&lt;LEFT, R&gt;
+}</code></pre>
+<!-- .element style="width: 100%" -->
+
+-v-
+
+## Как мы свои монады писали
+
+<pre><code class="hljs" data-line-numbers="1">sealed class Either&lt;out LEFT, out RIGHT&gt; {
+  class Left&lt;LEFT&gt;(private val left: LEFT) : Either&lt;LEFT, Nothing&gt;() {
+    override fun &lt;R&gt; mapLeft(trans: (LEFT) -&gt; R) = Left(trans(left))
+    override fun &lt;R&gt; mapRight(trans: (Nothing) -&gt; R) = this
+  }
+  class Right&lt;RIGHT&gt;(private val right: RIGHT) : Either&lt;Nothing, RIGHT&gt;() {
+    override fun &lt;R&gt; mapLeft(trans: (Nothing) -&gt; R) = this
+    override fun &lt;R&gt; mapRight(trans: (RIGHT) -&gt; R) = Right(trans(right))
+  }
+  abstract fun &lt;R&gt; mapLeft(trans: (LEFT) -&gt; R): Either&lt;R, RIGHT&gt;
+  abstract fun &lt;R&gt; mapRight(trans: (RIGHT) -&gt; R): Either&lt;LEFT, R&gt;
+}</code></pre>
+<!-- .element style="width: 100%" -->
+
+-v-
+
+## Как мы свои монады писали
+
+<pre><code class="hljs" data-line-numbers="10,11">sealed class Either&lt;out LEFT, out RIGHT&gt; {
+  class Left&lt;LEFT&gt;(private val left: LEFT) : Either&lt;LEFT, Nothing&gt;() {
+    override fun &lt;R&gt; mapLeft(trans: (LEFT) -&gt; R) = Left(trans(left))
+    override fun &lt;R&gt; mapRight(trans: (Nothing) -&gt; R) = this
+  }
+  class Right&lt;RIGHT&gt;(private val right: RIGHT) : Either&lt;Nothing, RIGHT&gt;() {
+    override fun &lt;R&gt; mapLeft(trans: (Nothing) -&gt; R) = this
+    override fun &lt;R&gt; mapRight(trans: (RIGHT) -&gt; R) = Right(trans(right))
+  }
+  abstract fun &lt;R&gt; mapLeft(trans: (LEFT) -&gt; R): Either&lt;R, RIGHT&gt;
+  abstract fun &lt;R&gt; mapRight(trans: (RIGHT) -&gt; R): Either&lt;LEFT, R&gt;
+}</code></pre>
+<!-- .element style="width: 100%" -->
+
+
+-v-
+
+## Как мы свои монады писали
+
+<pre><code class="hljs" data-line-numbers="2,3,6,7">sealed class Either&lt;out LEFT, out RIGHT&gt; {
+  class Left&lt;LEFT&gt;(private val left: LEFT) : Either&lt;LEFT, Nothing&gt;() {
+    override fun &lt;R&gt; mapLeft(trans: (LEFT) -&gt; R) = Left(trans(left))
+    override fun &lt;R&gt; mapRight(trans: (Nothing) -&gt; R) = this
+  }
+  class Right&lt;RIGHT&gt;(private val right: RIGHT) : Either&lt;Nothing, RIGHT&gt;() {
+    override fun &lt;R&gt; mapLeft(trans: (Nothing) -&gt; R) = this
+    override fun &lt;R&gt; mapRight(trans: (RIGHT) -&gt; R) = Right(trans(right))
+  }
+  abstract fun &lt;R&gt; mapLeft(trans: (LEFT) -&gt; R): Either&lt;R, RIGHT&gt;
+  abstract fun &lt;R&gt; mapRight(trans: (RIGHT) -&gt; R): Either&lt;LEFT, R&gt;
+}</code></pre>
+<!-- .element style="width: 100%" -->
+
+
+-v-
+
+## Как мы свои монады писали
+
+<pre><code class="hljs" data-line-numbers="2,4,6,8">sealed class Either&lt;out LEFT, out RIGHT&gt; {
+  class Left&lt;LEFT&gt;(private val left: LEFT) : Either&lt;LEFT, Nothing&gt;() {
+    override fun &lt;R&gt; mapLeft(trans: (LEFT) -&gt; R) = Left(trans(left))
+    override fun &lt;R&gt; mapRight(trans: (Nothing) -&gt; R) = this
+  }
+  class Right&lt;RIGHT&gt;(private val right: RIGHT) : Either&lt;Nothing, RIGHT&gt;() {
+    override fun &lt;R&gt; mapLeft(trans: (Nothing) -&gt; R) = this
+    override fun &lt;R&gt; mapRight(trans: (RIGHT) -&gt; R) = Right(trans(right))
+  }
+  abstract fun &lt;R&gt; mapLeft(trans: (LEFT) -&gt; R): Either&lt;R, RIGHT&gt;
+  abstract fun &lt;R&gt; mapRight(trans: (RIGHT) -&gt; R): Either&lt;LEFT, R&gt;
+}</code></pre>
+<!-- .element style="width: 100%" -->
+
+-v-
+
+## Вот же круто! А зачем?
+
+Ради цепочек асинхронных операций
+
+-v-
+
+## Было
+
+```java
+CompletableFuture
+    .supplyAsync { someCall() }
+    .exceptionally { /* What am I supposed to do here? Blow up? */ }
+    .thenApply { input -> process(input) }
+    .thenAccept { result -> println(result) }
+```
+
+-v-
+
+## Стало
+
+```kotlin
+CompletableFuture
+    .supplyAsync { eitherTry(someSyncCall()) }
+    .thenApply { input -> input.mapRight { process(it) } }
+    .thenAccept {
+        when (it) {
+            is Left -> handleError()
+            is Right -> handleResult()
+        }
+    }
+```
+
+---
+
+<blockquote>В программировании есть две проблемы: инвалидация кешей и именование переменных</blockquote>
+
+---
+
+## Именование переменных
+
+* Функции без классов, обычно получают класс `FilenameKt`
+  * Например если функции лежат в `Utils.kt` – из джавы они будут выглядеть как `UtilsKt.functionName()`
+* Иногда нам надо чтобы функция именовалась в джаве иначе
+* <!-- .element class="fragment" --><code>@JvmName</code> to the rescue! 
+
+
