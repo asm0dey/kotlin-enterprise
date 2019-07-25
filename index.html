@@ -258,20 +258,20 @@ private static &lt;T extends Throwable&gt; T sneakyThrow0(Throwable t) throws T 
                         </code></pre>
                 <h3 class="fragment" style="color: red">Транзакция не откатится!</h3>
             </section>
-            <section>
-                <h2>Spring + Kotlin. Part 2. <code>@Transactional</code></h2>
-                <div class="row">
-                    <div class="col-50">
-                        <h4><b>Проблема</b></h4>
-                        <p>Не откатываются транзакции</p>
-                    </div>
-                    <div class="col-50 fragment">
-                        <h4><b>Решение</b></h4>
-                        <p>Внимательно следить за сторонними исключениями</p>
-                        <p>Не создавать свои checked</p>
-                    </div>
+        </section>
+        <section>
+            <h2>Spring + Kotlin. Part 2. <code>@Transactional</code></h2>
+            <div class="row">
+                <div class="col-50">
+                    <h4><b>Проблема</b></h4>
+                    <p>Не откатываются транзакции</p>
                 </div>
-            </section>
+                <div class="col-50 fragment">
+                    <h4><b>Решение</b></h4>
+                    <p>Внимательно следить за сторонними исключениями</p>
+                    <p>Не создавать свои checked</p>
+                </div>
+            </div>
         </section>
         <section>
             <section>
