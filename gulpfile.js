@@ -11,7 +11,7 @@ const del = require('del');
 const htmlreplace = require('gulp-html-replace');
 sass.compiler = require('node-sass');
 const imagemin = require('gulp-imagemin');
-const archiver = require('gulp-archiver');
+const archiver = require('gulp-zip');
 const browserSync = require('browser-sync').create();
 
 
